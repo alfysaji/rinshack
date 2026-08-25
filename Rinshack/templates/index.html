@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rins:Hack | NFT Marketplace CTF</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================
+           COLOR PALETTE & RESET (Gold, Black, White)
+           ========================================== */
+        :root {
+            --bg-color: #ffffff;          /* Clean White Background */
+            --card-bg: #f9f9fb;          /* Light contrast card background */
+            --black-text: #0d0d11;       /* Dark Black text */
+            --gold: #dfa300;             /* Rich Gold Accent */
+            --gold-dark: #b88600;        /* Gold for buttons/hover */
+            --gold-glow: rgba(223, 163, 0, 0.2);
+            --text-muted: #6c757d;       /* Muted grey text */
+            --border-color: #e2e8f0;     /* Subtle light border */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--black-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==========================================
+           HEADER / NAVBAR
+           ========================================== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black-text);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--black-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--gold-glow);
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(223, 163, 0, 0.35);
+        }
+
+        /* ==========================================
+           HERO & SEARCH SECTION
+           ========================================== */
+        .hero {
+            text-align: center;
+            padding: 3.5rem 1rem 2.5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            color: var(--black-text);
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .search-container {
+            margin-top: 2rem;
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 1rem 1.2rem 1rem 3rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--black-text);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px var(--gold-glow);
+            background-color: #ffffff;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* ==========================================
+           MAIN CONTENT & NFT GRID (3 per row)
+           ========================================== */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 3rem 1.5rem;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .tab {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .tab.active {
+            color: var(--black-text);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* NFT Card Styling */
+        .nft-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nft-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .img-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+            background-color: #f0f0f0;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .nft-card:hover .img-container img {
+            transform: scale(1.05);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--black-text);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .favorite-btn:hover {
+            color: #ff4757;
+            background: #ffffff;
+        }
+
+        .nft-details {
+            padding: 1.2rem;
+            background-color: #ffffff;
+        }
+
+        .nft-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--black-text);
+        }
+
+        .nft-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .price-value {
+            font-weight: 700;
+            color: var(--black-text);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .price-value i {
+            color: var(--gold);
+        }
+
+        .buy-btn {
+            background-color: var(--black-text);
+            border: 1px solid var(--black-text);
+            color: #ffffff;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .buy-btn:hover {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: #ffffff;
+        }
+
+        /* ==========================================
+           FOOTER
+           ========================================== */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: #ffffff;
+        }
+
+        footer span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .nft-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .nft-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- here is the first flag   RINS_1{ed4_pODRaAA}  -->
+    <!-- Header Section -->
+    <header>
+        <a href="/index" class="logo">
+            Rins:Hack
+        </a>
+       
+        <button class="login-btn" onclick="navigateTo('/signin')">
+            <i class="fa-solid fa-key"></i> Sign In
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Title -->
+        <section class="hero">
+            <h1>Find your next collectible <span>wherever it lives</span></h1>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" onkeyup="filterNFTs()" placeholder="Search profiles, flags, and NFTs by name...">
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section>
+            <div class="grid-header">
+                <div class="filter-tabs">
+                    <span class="tab active">NFTs</span>
+                </div>
+            </div>
+
+            <!-- 9 NFT Items Container (3 in a Row) -->
+            <div class="nft-grid" id="nftGrid">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Script -->
+    <script>
+    // NFT Data definition with unique image paths for each item
+    const nfts = [
+        { 
+            id: 1, 
+            name: "Ape Hacker #101", 
+            price: "2.5 ETH", 
+            page: "/product1", 
+            image: "{{ url_for('static', filename='images/ape.webp') }}" 
+        },
+        { 
+            id: 2, 
+            name: "Cyber Ape #102", 
+            price: "1.8 ETH", 
+            page: "/product2", 
+            image: "{{ url_for('static', filename='images/ape3.webp') }}" 
+        },
+        { 
+            id: 3, 
+            name: "Shadow Ape #103", 
+            price: "3.2 ETH", 
+            page: "/product3", 
+            image: "{{ url_for('static', filename='images/ape4.webp') }}" 
+        },
+        { 
+            id: 4, 
+            name: "Gold Glitch #104", 
+            price: "4.0 ETH", 
+            page: "/Ch@!!3nge", 
+            image: "{{ url_for('static', filename='images/ape5.webp') }}" 
+        }
+    ];
+
+    // Render Cards dynamically
+    const grid = document.getElementById('nftGrid');
+
+    function renderGrid(items) {
+        grid.innerHTML = '';
+        items.forEach(nft => {
+            const cardHtml = `
+                <div class="nft-card" data-id="${nft.id}">
+                    <div class="img-container">
+                        <img src="${nft.image}" alt="${nft.name}" onerror="this.src='https://via.placeholder.com/400x400/ffffff/dfa300?text=Image+Missing'">
+                        <button class="favorite-btn" onclick="toggleFavorite(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="nft-details">
+                        <div class="nft-title">
+                            <span>${nft.name}</span>
+                        </div>
+                        <div class="nft-info">
+                            <div>
+                                <div class="price-label">Price</div>
+                                <div class="price-value">
+                                    <i class="fa-brands fa-ethereum"></i> ${nft.price}
+                                </div>
+                            </div>
+                            <button class="buy-btn" onclick="inspectNFT(${nft.id}, '${nft.page}')">Inspect</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += cardHtml;
+        });
+    }
+
+    // Initial render
+    renderGrid(nfts);
+
+    // Search Filter Functionality
+    function filterNFTs() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = nfts.filter(nft => nft.name.toLowerCase().includes(query));
+        renderGrid(filtered);
+    }
+
+    // Toggle Favorite Icon
+    function toggleFavorite(btn) {
+        const icon = btn.querySelector('i');
+        if (icon.classList.contains('fa-regular')) {
+            icon.classList.remove('fa-regular');
+            icon.classList.add('fa-solid');
+            icon.style.color = '#ff4757';
+        } else {
+            icon.classList.remove('fa-solid');
+            icon.classList.add('fa-regular');
+            icon.style.color = '#0d0d11';
+        }
+    }
+
+    // Generic navigation handler
+    function navigateTo(url) {
+        window.location.href = url;
+    }
+
+    // Inspect button click handler
+    function inspectNFT(id, page) {
+        if (page && page !== "null") {
+            window.location.href = page;
+        } else {
+            console.log(`[CTF Debug]: Inspecting NFT #${id}... No dedicated product page set.`);
+        }
+    }
+</script>
+</body>
+</html>

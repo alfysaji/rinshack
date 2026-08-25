@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Security Challenge | Rins:Hack</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #f9f9fb;
+            --black-text: #0d0d11;
+            --gold: #dfa300;
+            --gold-dark: #b88600;
+            --gold-glow: rgba(223, 163, 0, 0.2);
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background-color: var(--bg-color); color: var(--black-text); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background-color: #ffffff; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--black-text); text-decoration: none; }
+        .back-link { color: var(--black-text); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .back-link:hover { color: var(--gold); }
+
+        main { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; }
+
+        .status-box { width: 100%; max-width: 480px; margin-bottom: 1.2rem; }
+        .alert-danger { padding: 1rem; border-radius: 12px; font-weight: 600; font-size: 0.92rem; text-align: center; background-color: #fde8e8; color: #c81e1e; border: 1px solid #f8b4b4; }
+
+        /* Flag Box Banner */
+        .flag-card {
+            background: #0d0d11;
+            border: 2px solid var(--gold);
+            border-radius: 16px;
+            padding: 1.2rem;
+            color: #ffffff;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(223, 163, 0, 0.25);
+            animation: fadeIn 0.4s ease;
+        }
+        .flag-card .flag-title {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .flag-card .flag-box {
+            background: #1a1a24;
+            border: 1px dashed var(--gold);
+            padding: 0.8rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .flag-card code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #2ecc71;
+            font-size: 1.05rem;
+            font-weight: 700;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .copy-btn:hover { background: #ffffff; }
+
+        .challenge-card { background-color: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 480px; padding: 2.5rem 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
+        .card-header { text-align: center; margin-bottom: 1.8rem; }
+        .card-header h1 { font-size: 1.6rem; font-weight: 800; color: var(--black-text); }
+        .card-header p { font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+        .challenge-form { display: flex; flex-direction: column; gap: 1.2rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.9rem; font-weight: 700; color: var(--black-text); display: flex; justify-content: space-between; align-items: center; }
+        .form-group label span.badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+        .badge-active { background-color: #e1f5fe; color: #0288d1; }
+        .badge-locked { background-color: #ffebee; color: #c62828; }
+
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 1rem; color: var(--text-muted); }
+        .input-wrapper input { width: 100%; padding: 0.85rem 1rem 0.85rem 2.8rem; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--card-bg); color: var(--black-text); font-size: 0.95rem; outline: none; transition: all 0.3s ease; }
+        .input-wrapper input:focus { border-color: var(--gold); background-color: #ffffff; box-shadow: 0 0 10px var(--gold-glow); }
+        .input-wrapper input:disabled { background-color: #edf2f7; color: #a0aec0; cursor: not-allowed; border-color: #cbd5e0; }
+
+        .submit-btn { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #ffffff; border: none; padding: 0.9rem; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px var(--gold-glow); margin-top: 0.5rem; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(223, 163, 0, 0.35); }
+
+        /* Modal styling */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13, 13, 17, 0.8); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease; }
+        .modal-card { background-color: #ffffff; border: 2px solid var(--gold); border-radius: 20px; padding: 2.2rem 2rem; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); animation: scaleUp 0.3s ease; }
+        .agent-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--gold-glow); color: var(--gold-dark); border: 1px solid var(--gold); padding: 0.4rem 1rem; border-radius: 30px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .modal-card h2 { font-size: 1.4rem; font-weight: 800; color: var(--black-text); margin-bottom: 0.8rem; }
+        .modal-caption { font-size: 0.95rem; color: #4a5568; line-height: 1.5; margin-bottom: 1.8rem; }
+        .close-modal-btn { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #ffffff; border: none; padding: 0.75rem 2rem; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; }
+        .close-modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(223, 163, 0, 0.35); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        footer { border-top: 1px solid var(--border-color); padding: 1.5rem 5%; text-align: center; color: var(--text-muted); font-size: 0.85rem; background-color: #ffffff; margin-top: auto; }
+        footer span { color: var(--gold); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">Rins:Hack</a>
+        <a href="{{ url_for('index') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </header>
+
+    <main>
+        <!-- Alerts and Flag Container -->
+        <div class="status-box">
+            {% if error %}
+                <div class="alert-danger">{{ error }}</div>
+            {% endif %}
+
+            {% if flag %}
+                <div class="flag-card">
+                    <div class="flag-title">
+                        <i class="fa-solid fa-trophy"></i> Challenge Solved!
+                    </div>
+                    <div class="flag-box">
+                        <code id="flagValue">{{ flag }}</code>
+                        <button class="copy-btn" onclick="copyFlag()"><i class="fa-solid fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="challenge-card">
+            <div class="card-header">
+                <h1>Verification Checkpoint</h1>
+                <p>Complete all 3 mathematical tests to receive the flag.</p>
+            </div>
+
+            <form class="challenge-form" id="mathForm" action="/Ch@!!3nge" method="POST">
+                <!-- Question 1 -->
+                <div class="form-group">
+                    <label for="ans1">
+                        Question 1: 12 + 15 = ?
+                        <span class="badge badge-active">Unlocked</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calculator"></i>
+                        <input type="number" id="ans1" name="ans1" placeholder="Enter answer..." required>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="form-group">
+                    <label for="ans2">
+                        Question 2: 8 &times; 7 = ?
+                        <span class="badge badge-active">Unlocked</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calculator"></i>
+                        <input type="number" id="ans2" name="ans2" placeholder="Enter answer..." required>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="form-group">
+                    <label for="ans3">
+                        Question 3: 100 - 42 = ?
+                        <span class="badge badge-locked"><i class="fa-solid fa-lock"></i> Client Locked</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="number" id="ans3" name="ans3" placeholder="Input locked by Client Guard..." disabled>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn"><i class="fa-solid fa-paper-plane"></i> Submit Answers</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Briefing Modal -->
+    <div class="modal-overlay" id="rinsModal">
+        <div class="modal-card">
+            <div class="agent-badge">
+                <i class="fa-solid fa-user-ninja"></i> Agent Rins
+            </div>
+            <h2>Security Briefing</h2>
+            <p class="modal-caption">
+                "You want to complete the challenges and submit the answers... but remember, client-side controls are only as strong as the browser enforcing them. Good luck getting all three through!"
+            </p>
+            <button class="close-modal-btn" onclick="closeModal()">Accept Mission</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform.</p>
+    </footer>
+
+    <script>
+        function closeModal() {
+            document.getElementById('rinsModal').style.display = 'none';
+        }
+
+        // Strips Q3 on standard browser submit
+        document.getElementById('mathForm').addEventListener('submit', function(e) {
+            const ans3Input = document.getElementById('ans3');
+            ans3Input.disabled = true;
+            ans3Input.value = '';
+        });
+
+        // Copy flag helper
+        function copyFlag() {
+            const flagText = document.getElementById('flagValue').innerText;
+            navigator.clipboard.writeText(flagText);
+            alert('Flag copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Rins:Hack Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #f9f9fb;
+            --black-text: #0d0d11;
+            --gold: #dfa300;
+            --gold-dark: #b88600;
+            --gold-glow: rgba(223, 163, 0, 0.2);
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background-color: var(--bg-color); color: var(--black-text); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background-color: #ffffff; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--black-text); text-decoration: none; }
+        
+        .logout-btn {
+            background-color: var(--black-text); color: #ffffff; border: none; padding: 0.5rem 1.2rem; font-weight: 600; border-radius: 8px; text-decoration: none; transition: background 0.3s;
+        }
+        .logout-btn:hover { background-color: var(--gold); }
+
+        main { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; width: 100%; flex-grow: 1; }
+
+        .dashboard-header { margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+        .dashboard-header h1 { font-size: 2.2rem; font-weight: 800; }
+        .dashboard-header h1 span { color: var(--gold); }
+
+        /* Flag Box Styling */
+        .flag-vault {
+            background: linear-gradient(135deg, #111, #222); color: #ffffff; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(223, 163, 0, 0.15); text-align: center;
+        }
+        .flag-vault h2 { font-size: 1.2rem; color: var(--gold); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .flag-box {
+            background-color: #0d0d11; border: 1px dashed var(--gold); padding: 1rem; border-radius: 10px; font-family: 'Courier New', Courier, monospace; font-size: 1.4rem; color: var(--gold); display: inline-block; width: 100%; max-width: 600px; word-break: break-all;
+        }
+
+        /* Admin Info Grid */
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .info-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; }
+        .info-card h3 { font-size: 1.1rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 8px; color: var(--black-text); }
+        .info-card h3 i { color: var(--gold); }
+        .info-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        footer { border-top: 1px solid var(--border-color); padding: 2rem 5%; text-align: center; color: var(--text-muted); font-size: 0.9rem; background-color: #ffffff; margin-top: auto; }
+        footer span { color: var(--gold); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/index" class="logo">Rins:Hack</a>
+        <a href="/logout" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </header>
+
+    <main>
+        <section class="dashboard-header">
+            <h1>Admin Panel <span>System Control</span></h1>
+            <p style="color: var(--text-muted); margin-top: 5px;">Authenticated via: <strong>{{ auth_type }}</strong></p>
+        </section>
+
+        <!-- Flag Vault Section -->
+        <section class="flag-vault">
+            <h2><i class="fa-solid fa-shield-halved"></i> Sensitive CTF Flag Unlocked</h2>
+            <div class="flag-box">
+                {{ flag }}
+            </div>
+        </section>
+
+        <!-- Mock Admin Control Grid -->
+        <section class="admin-grid">
+            <div class="info-card">
+                <h3><i class="fa-solid fa-server"></i> System Status</h3>
+                <p>Database: Operational</p>
+                <p>CTF Core: Active</p>
+                <p>Security Level: Level 2 Flag Isolation</p>
+            </div>
+            <div class="info-card">
+                <h3><i class="fa-solid fa-user-shield"></i> Credentials Config</h3>
+                <p>Admin User: <code>admin</code></p>
+                <p>Admin Password: <code>admin123</code></p>
+                <p>SQLi Status: Enabled (Educational Bypass)</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

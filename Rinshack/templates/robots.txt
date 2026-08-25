@@ -1,0 +1,2 @@
+aliens and /S3cr3T5.txt rule the universe. 
+flag{this_is_a_fake_flag}

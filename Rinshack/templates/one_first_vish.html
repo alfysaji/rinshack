@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dossier - @one_first_vish | Rins:Hack Marketplace</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================
+           COLOR PALETTE & RESET (Gold, Black, White)
+           ========================================== */
+        :root {
+            --bg-color: #ffffff;          /* Clean White Background */
+            --card-bg: #f9f9fb;          /* Light contrast background */
+            --black-text: #0d0d11;       /* Dark Black text */
+            --gold: #dfa300;             /* Rich Gold Accent */
+            --gold-dark: #b88600;        /* Gold for buttons/hover */
+            --gold-glow: rgba(223, 163, 0, 0.2);
+            --text-muted: #6c757d;       /* Muted grey text */
+            --border-color: #e2e8f0;     /* Subtle light border */
+            --success-green: #22c55e;
+            --danger-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--black-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header / Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black-text);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .user-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-badge {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--gold-glow);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(223, 163, 0, 0.35);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb {
+            max-width: 1200px;
+            width: 100%;
+            margin: 1.5rem auto 0;
+            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--black-text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--gold);
+        }
+
+        /* Main Section */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 4rem 1.5rem;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        /* Agent Profile Header Card */
+        .profile-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px var(--gold-glow);
+        }
+
+        .profile-info h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--black-text);
+            line-height: 1.2;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* Flag Card Section */
+        .flag-card {
+            background-color: #ffffff;
+            border: 2px solid var(--gold);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(223, 163, 0, 0.15);
+        }
+
+        .flag-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flag-box {
+            background-color: var(--black-text);
+            color: var(--gold);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 15px rgba(223, 163, 0, 0.2);
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(223, 163, 0, 0.35);
+        }
+
+        /* Info Cards & Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--black-text);
+        }
+
+        .details-list {
+            list-style: none;
+        }
+
+        .details-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+
+        .details-list span {
+            color: var(--text-muted);
+        }
+
+        .details-list strong {
+            color: var(--black-text);
+        }
+
+        .status-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .status-tag.success {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--success-green);
+        }
+
+        .status-tag.warning {
+            background-color: rgba(223, 163, 0, 0.1);
+            color: var(--gold-dark);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: #ffffff;
+            margin-top: auto;
+        }
+
+        footer span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        @media (max-width: 850px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .profile-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .flag-box { flex-direction: column; gap: 1rem; align-items: flex-start; word-break: break-all; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">
+            Rins:Hack
+        </a>
+        <div class="user-nav-actions">
+            <span class="status-badge">
+                <i class="fa-solid fa-circle-check"></i> AUTHENTICATED
+            </span>
+            <a href="{{ url_for('logout') if 'logout' in endpoints else '#' }}" class="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation Breadcrumbs -->
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Marketplace</a> / <a href="#">Restricted</a> / @one_first_vish
+    </div>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Profile Header Card -->
+        <div class="profile-card">
+            <div class="profile-left">
+                <div class="profile-avatar">VIZ</div>
+                <div class="profile-info">
+                    <h1>agent VIZ</h1>
+                    <p><i class="fa-solid fa-at"></i> Username: <strong>one_first_vish</strong> | Level 4 Clearance</p>
+                </div>
+            </div>
+            <div>
+                <span class="status-tag warning"><i class="fa-solid fa-shield-halved"></i> SECURE CLEARANCE LEVEL 4</span>
+            </div>
+        </div>
+
+        <!-- FLAG DISPLAY CARD -->
+        <div class="flag-card">
+            <div class="flag-header">
+                <div class="flag-title">
+                    <i class="fa-solid fa-trophy"></i> Restricted Asset Vault Flag
+                </div>
+            </div>
+            <div class="flag-box">
+                <span id="flagValue">RINS_2{Po5$i8Le_But_nO7_PR@ct1C@l}</span>
+                <button class="copy-btn" onclick="copyFlag()">
+                    <i class="fa-regular fa-copy"></i> Copy Flag
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+
+            <!-- Security Audit Log -->
+            <div class="info-card">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Account Audit History</h3>
+                <ul class="details-list">
+                    <li>
+                        <span>Credential Match Verified (MD5 Hash Check)</span>
+                        <span class="status-tag success">SUCCESS</span>
+                    </li>
+                    <li>
+                        <span>Data Breach Incident Flag (#8842) Associated</span>
+                        <span class="status-tag warning">REVIEWED</span>
+                    </li>
+                    <li>
+                        <span>Ape Hacker #101 Ownership Confirmed</span>
+                        <span class="status-tag success">VERIFIED</span>
+                    </li>
+                    <li>
+                        <span>Marketplace Session Access Granted</span>
+                        <span class="status-tag success">ACTIVE</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Notes & System Intelligence -->
+            <div class="info-card">
+                <h3><i class="fa-solid fa-circle-info"></i> Agent Dossier Note</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+                    You have successfully authenticated into <strong>@one_first_vish</strong>'s administrative dossier. Keep these credentials confidential and ensure proper security checks are implemented on the marketplace.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform. All rights reserved.</p>
+    </footer>
+
+    <!-- Copy Flag Function -->
+    <script>
+        function copyFlag() {
+            const flag = document.getElementById("flagValue").innerText;
+            navigator.clipboard.writeText(flag).then(() => {
+                alert("Flag copied to clipboard!");
+            }).catch(err => {
+                console.error("Copy failed: ", err);
+            });
+        }
+    </script>
+</body>
+</html>

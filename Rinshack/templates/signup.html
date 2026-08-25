@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Register | Rins:Hack Marketplace</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #F6F7F9; 
+            --card-bg: #FFFFFF;
+            --black-text: #0d0d11;
+            --gold: #A67C00; 
+            --gold-dark: #916c00;
+            --input-bg: #F8F9FA; 
+            --text-muted: #6c757d;
+            --border-color: #E6E6E6;
+            --danger: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--black-text); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            overflow-x: hidden;
+        }
+
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 8%; 
+            background-color: transparent; 
+        }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--black-text); text-decoration: none; }
+        .back-link { color: var(--black-text); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.3s; font-size: 0.9rem; }
+        .back-link:hover { color: var(--gold); }
+
+        main { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0.5rem 1rem; 
+        }
+
+        .auth-card { 
+            background-color: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08); 
+            border-radius: 18px; 
+            width: 100%; 
+            max-width: 340px; 
+            padding: 0 0 1.5rem 0; 
+            overflow: hidden; 
+        }
+
+        .auth-card-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .auth-header, .auth-form {
+            padding-left: 1.8rem;
+            padding-right: 1.8rem;
+        }
+
+        .auth-header { text-align: center; margin-bottom: 0.8rem; }
+        .auth-header h1 { font-size: 1.5rem; font-weight: 800; color: var(--black-text); }
+
+        .auth-form { display: flex; flex-direction: column; gap: 0.75rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--black-text); text-align: left; }
+
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 0.9rem; color: var(--text-muted); font-size: 0.9rem; }
+        .input-wrapper input { 
+            width: 100%; 
+            padding: 0.6rem 0.8rem 0.6rem 2.4rem; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            background-color: var(--input-bg); 
+            color: var(--black-text); 
+            font-size: 0.9rem; 
+            outline: none; 
+            transition: all 0.3s ease; 
+        }
+        .input-wrapper input:focus { border-color: var(--gold); background-color: #ffffff; }
+
+        .submit-btn { 
+            background-color: var(--gold); 
+            color: #ffffff; 
+            border: none; 
+            padding: 0.75rem; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 6px 16px rgba(166, 124, 0, 0.3); 
+            margin-top: 0.4rem; 
+        }
+        .submit-btn:hover { background-color: var(--gold-dark); transform: translateY(-1px); }
+
+        /* Pop-up Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 17, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 340px;
+            padding: 0 0 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: scaleUp 0.25s ease;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-body {
+            padding: 0 1.5rem;
+        }
+
+        .modal-error-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--danger);
+            margin-bottom: 0.3rem;
+        }
+
+        .modal-caption {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .close-modal-btn {
+            background-color: var(--gold);
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(166, 124, 0, 0.3);
+        }
+
+        .close-modal-btn:hover {
+            background-color: var(--gold-dark);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        footer { 
+            padding: 1rem 5%; 
+            text-align: center; 
+            color: var(--text-muted); 
+            font-size: 0.8rem; 
+            background-color: transparent; 
+        }
+        footer span { color: var(--gold); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/index" class="logo">Rins:Hack</a>
+        <a href="/index" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </header>
+
+    <main>
+        <div class="auth-card">
+            <img src="{{ url_for('static', filename='images/viz1.jpeg') }}" alt="Viz1 Image" class="auth-card-image">
+
+            <div class="auth-header">
+                <h1>Sign In</h1>
+            </div>
+
+            <form class="auth-form" action="/signin" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="username" id="username" placeholder="Username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" name="password" id="password" placeholder="Password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Ape Popup Modal for Invalid Credentials -->
+    {% if show_ape_popup %}
+    <div class="modal-overlay" id="apeModal">
+        <div class="modal-card">
+            <img src="{{ url_for('static', filename='images/viz2.jpeg') }}" alt="Ape" class="modal-img">
+            <div class="modal-body">
+                <h3 class="modal-error-title">Invalid Credentials!</h3>
+                <p class="modal-caption">Its possible but not practical..</p>
+                <button class="close-modal-btn" onclick="closeModal()">Try Again</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform.</p>
+    </footer>
+
+    <script>
+        function closeModal() {
+            const modal = document.getElementById('apeModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Prevents modal popup on simple page refresh (F5)
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+</body>
+</html>

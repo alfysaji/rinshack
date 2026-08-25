@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ape Hacker #101 | Rins:Hack Marketplace</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #f9f9fb;
+            --black-text: #0d0d11;
+            --gold: #dfa300;
+            --gold-dark: #b88600;
+            --gold-glow: rgba(223, 163, 0, 0.2);
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--black-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black-text);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--gold-glow);
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(223, 163, 0, 0.35);
+        }
+
+        .breadcrumb {
+            max-width: 1200px;
+            width: 100%;
+            margin: 1.5rem auto 0;
+            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--black-text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--gold);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 4rem 1.5rem;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 1rem;
+        }
+
+        .media-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .image-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .image-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        .details-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .collection-title {
+            color: var(--gold-dark);
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .product-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--black-text);
+            line-height: 1.2;
+        }
+
+        .owner-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .owner-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .owner-info span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .owner-info strong {
+            font-size: 0.9rem;
+            color: var(--black-text);
+        }
+
+        .price-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .price-value-container {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+        }
+
+        .price-crypto {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--black-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-crypto i {
+            color: var(--gold);
+        }
+
+        .price-fiat {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .primary-btn, .secondary-btn {
+            border: none;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .primary-btn {
+            flex: 2;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #ffffff;
+            box-shadow: 0 4px 12px var(--gold-glow);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(223, 163, 0, 0.35);
+        }
+
+        .secondary-btn {
+            flex: 1;
+            background-color: var(--black-text);
+            color: #ffffff;
+        }
+
+        .secondary-btn:hover {
+            background-color: #2a2a35;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--black-text);
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .trait-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .trait-type {
+            font-size: 0.75rem;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .trait-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--black-text);
+            margin-top: 2px;
+        }
+
+        .details-list {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+
+        .details-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+
+        .details-list span {
+            color: var(--text-muted);
+        }
+
+        .details-list strong {
+            color: var(--black-text);
+        }
+
+        .alert-box {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: #ffffff;
+            margin-top: auto;
+        }
+
+        footer span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* --- POPUP MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(13, 13, 17, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 650px;
+            width: 90%;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-left {
+            width: 40%;
+            background-color: var(--card-bg);
+        }
+
+        .modal-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-right {
+            width: 60%;
+            padding: 2.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px 10px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            color: var(--black-text);
+        }
+
+        .typewriter-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--black-text);
+            line-height: 1.6;
+            min-height: 80px; 
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.1rem;
+            background-color: var(--gold);
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @media (max-width: 850px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-card {
+                flex-direction: column;
+            }
+
+            .modal-left, .modal-right {
+                width: 100%;
+            }
+
+            .modal-left img {
+                max-height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Popup Modal -->
+    <div id="hintModal" class="modal-overlay">
+        <div class="modal-card">
+            <button id="closeModalBtn" class="close-modal-btn" onclick="closeModal()" type="button">&times;</button>
+            
+            <div class="modal-left">
+                <img src="{{ url_for('static', filename='images/rins1.jpeg') }}" alt="Ape Hacker #101" onerror="this.src='https://via.placeholder.com/600x600/ffffff/dfa300?text=ape.webp+Missing'">
+            </div>
+
+            <div class="modal-right">
+                <p class="typewriter-text">
+                    <span id="typedText"></span><span class="typewriter-cursor"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">
+            Rins:Hack
+        </a>
+        <a href="{{ url_for('signin') }}" class="login-btn">
+            <i class="fa-solid fa-key"></i> Sign In
+        </a>
+    </header>
+
+    <!-- Navigation Breadcrumbs -->
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Marketplace</a> / <a href="#">Ape Series</a> / Ape Hacker #101
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-box">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="product-container">
+            
+            <!-- Left Column: NFT Image & Media -->
+            <div class="media-column">
+                <div class="image-card">
+                    <img src="{{ url_for('static', filename='images/ape2.webp') }}" alt="Ape Hacker #101" onerror="this.src='https://via.placeholder.com/600x600/ffffff/dfa300?text=ape.webp+Missing'">
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fa-solid fa-circle-info"></i> Item Details</h3>
+                    <ul class="details-list">
+                        <li><span>Contract Address</span> <strong>0x7a2...b94f</strong></li>
+                        <li><span>Token ID</span> <strong>101</strong></li>
+                        <li><span>Token Standard</span> <strong>ERC-721</strong></li>
+                        <li><span>Blockchain</span> <strong>Ethereum</strong></li>
+                        <li><span>Metadata</span> <strong>Centralized Storage</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Column: Info, Price, and Actions -->
+            <div class="details-column">
+                
+                <div>
+                    <div class="collection-title">
+                        <i class="fa-solid fa-shield-halved"></i> Cyber Ape Genesis
+                    </div>
+                    <h1 class="product-title">gold glitch #191</h1>
+                </div>
+
+                <div class="owner-badge">
+                    <div class="owner-avatar">RH</div>
+                    <div class="owner-info">
+                        <span>Created & Owned by</span>
+                        <strong>Rins:Hack</strong>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-label">Current Price</div>
+                    <div class="price-value-container">
+                        <div class="price-crypto">
+                            <i class="fa-brands fa-ethereum"></i> 2.5 ETH
+                        </div>
+                        <div class="price-fiat">($7,250.00 USD)</div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <form action="#" method="POST" style="flex: 2;">
+                            <button type="submit" class="primary-btn" style="width: 100%;">
+                                <i class="fa-solid fa-wallet"></i> Buy Now
+                            </button>
+                        </form>
+
+                        <form action="#" method="POST" style="flex: 1;">
+                            <button type="submit" class="secondary-btn" style="width: 100%;">
+                                Make Offer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fa-solid fa-align-left"></i> Description</h3>
+                    <p>
+                        <strong>Ape Hacker #101</strong> represents the flagship digital artwork of the Genesis Collection. Featuring a hand-crafted retro visual aesthetic, this piece fuses underground hacker culture with high-tier crypto collectibles. Legend has it that inspect-level secrets are embedded within its metadata.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fa-solid fa-tags"></i> Traits & Attributes</h3>
+                    <div class="traits-grid">
+                        <div class="trait-box">
+                            <div class="trait-type">Background</div>
+                            <div class="trait-value">Matte Gray</div>
+                        </div>
+                        <div class="trait-box">
+                            <div class="trait-type">Fur</div>
+                            <div class="trait-value">Gold Glitch</div>
+                        </div>
+                        <div class="trait-box">
+                            <div class="trait-type">Eyes</div>
+                            <div class="trait-value">Cyber Visor</div>
+                        </div>
+                        <div class="trait-box">
+                            <div class="trait-type">Mouth</div>
+                            <div class="trait-value">Cigar</div>
+                        </div>
+                        <div class="trait-box">
+                            <div class="trait-type">Rarity</div>
+                            <div class="trait-value">Legendary</div>
+                        </div>
+                        <div class="trait-box">
+                            <div class="trait-type">Access</div>
+                            <div class="trait-value">Root Level</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span>Rins:Hack</span> CTF Challenge Platform. All rights reserved.</p>
+    </footer>
+
+    <!-- Typewriter & Modal Control Script -->
+    <script>
+        const hintText = "Congrats on finding the page! Take a break... care for some cookies? 🍪";
+        const typedTextElement = document.getElementById("typedText");
+        let i = 0;
+
+        function typeWriter() {
+            if (i < hintText.length) {
+                typedTextElement.innerHTML += hintText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 45); 
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("hintModal");
+            if (modal) {
+                modal.style.opacity = "0";
+                setTimeout(() => {
+                    modal.style.display = "none";
+                }, 300);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typeWriter, 300);
+
+            const modalOverlay = document.getElementById("hintModal");
+            if (modalOverlay) {
+                modalOverlay.addEventListener("click", (e) => {
+                    if (e.target === modalOverlay) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
